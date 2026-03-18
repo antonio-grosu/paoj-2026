@@ -1,5 +1,8 @@
 package com.pao.laboratory03.collections;
 
+import java.util.*;
+
+
 /**
  * Exercițiul 1 — Colecții: HashMap și TreeMap
  *
@@ -50,7 +53,80 @@ package com.pao.laboratory03.collections;
  */
 public class Main {
     public static void main(String[] args) {
+        System.out.println("\n=== A) ===");
+
         // TODO: implementează cele 3 părți de mai sus
+        /*
+        * PARTEA A — HashMap (frecvența cuvintelor)
+            * 1. Declară un array de String-uri:
+            *    String[] words = {"java", "python", "java", "c++", "python", "java", "rust", "c++", "go"};
+            * 2. Creează un HashMap<String, Integer> care contorizează de câte ori apare fiecare cuvânt.
+            *    - Parcurge array-ul și folosește put() + getOrDefault() pentru a incrementa contorul.
+            * 3. Afișează map-ul.
+            * 4. Verifică dacă există cheia "rust" cu containsKey().
+            * 5. Afișează DOAR cheile (keySet()), apoi DOAR valorile (values()).
+            * 6. Parcurge map-ul cu entrySet() și afișează "cheia -> valoarea" pentru fiecare intrare.
+            *
+        */
+
+        String[] words = {"java", "python", "java", "c++", "python", "java", "rust", "c++", "go"};
+
+        Map<String, Integer> words_count = new HashMap<>();
+
+        for (String w : words){
+            words_count.put(w, words_count.getOrDefault(w, 0) + 1);
+        }
+
+        System.out.println("Frecvente limbaje prog " + words_count);
+
+        System.out.println("Exista rust? " + words_count.containsKey("rust"));
+
+
+        System.out.println("Cheile HasMap-ului : " + words_count.keySet());
+        System.out.println("Valorile HasMap-ului : " + words_count.values());
+
+
+
+        System.out.println("Parcurgere cu entry map");
+
+        for(Map.Entry<String, Integer> entry : words_count.entrySet()){
+            System.out.println(" " + entry.getKey() + " => " + entry.getValue());
+        }
+
+//         * === PARTEA B: TreeMap — sortare automată ===
+//      * Sortat: {c++=2, go=1, java=3, python=2, rust=1}
+//      * Prima cheie: c++
+//       * Ultima cheie: rust
+//      *
+        System.out.println("\n=== B) ===");
+
+        TreeMap<String, Integer> sorted = new TreeMap<>(words_count);
+        System.out.println("Sortat " + sorted);
+        System.out.println("Prima cheie " + sorted.firstKey());
+        System.out.println("Ultima cheie " + sorted.lastKey());
+
+//          * PARTEA C — Map cu obiecte
+//  * 10. Creează un HashMap<String, List<String>> 
+// care asociază materii cu liste de studenți.
+//  *     Exemplu: "PAOJ" -> ["Ana", "Mihai", "Ion"], 
+// "BD" -> ["Ana", "Elena"]
+//  * 11. Afișează toți studenții de la materia "PAOJ".
+//  * 12. Adaugă un student nou la "BD" și afișează lista actualizată.
+//  *
+
+        System.out.println("\n=== C) ===");
+
+        Map<String, List<String>> materii = new HashMap<>(); 
+        materii.put("PAOJ", new ArrayList<>(Arrays.asList("Ana", "Mihai", "Ion")));
+
+        materii.put("BD", new ArrayList<>(Arrays.asList("Ana", "Elena")));
+
+        System.out.println("Studenti PAOJ " + materii.get("PAOJ"));
+
+        materii.get("BD").add("Antonio");
+        System.out.println("Studenti BD (updated)" + materii.get("BD"));
+        
     }
+
 }
 
