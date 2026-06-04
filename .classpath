@@ -2,5 +2,6 @@
 <classpath>
     <classpathentry kind="src" path="src"/>
     <classpathentry kind="lib" path="lib/java-diff-utils-4.15.jar"/>
+    <classpathentry kind="lib" path="lib/sqlite-jdbc-3.47.1.0.jar"/>
     <classpathentry kind="output" path="output"/>
 </classpath>
