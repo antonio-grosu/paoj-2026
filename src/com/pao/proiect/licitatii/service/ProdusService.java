@@ -4,17 +4,21 @@ import com.pao.proiect.licitatii.model.CategorieProdus;
 import com.pao.proiect.licitatii.model.CodProdus;
 import com.pao.proiect.licitatii.model.Produs;
 import com.pao.proiect.licitatii.model.Vanzator;
+import com.pao.proiect.licitatii.repository.ProdusRepository;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Operatii pe produse, persistate prin ProdusRepository.
+ */
 public class ProdusService {
     private static ProdusService instance;
 
-    private final Map<String, Produs> produse = new HashMap<>();
+    private final ProdusRepository repository = new ProdusRepository();
 
     private ProdusService() {}
 
@@ -25,53 +29,44 @@ public class ProdusService {
         return instance;
     }
 
-    public Produs adaugaProdus(String cod, String denumire, String descriere, CategorieProdus categorie, double pretMinim, Vanzator vanzator) {
+    public Produs adaugaProdus(String cod, String denumire, String descriere,
+                               CategorieProdus categorie, double pretMinim, Vanzator vanzator) throws SQLException {
         CodProdus codProdus = new CodProdus(cod);
-        if (produse.containsKey(codProdus.getValoare())) {
+        if (repository.findById(codProdus.getValoare()).isPresent()) {
             throw new IllegalArgumentException("Exista deja un produs cu codul: " + cod);
         }
         Produs p = new Produs(codProdus, denumire, descriere, categorie, pretMinim, vanzator);
-        produse.put(codProdus.getValoare(), p);
+        repository.save(p);
         return p;
     }
 
-    public Produs cautaDupaCod(String cod) {
-        Produs p = produse.get(cod.toUpperCase());
-        if (p == null) throw new IllegalArgumentException("Produsul cu codul " + cod + " nu exista.");
-        return p;
+    public Produs cautaDupaCod(String cod) throws SQLException {
+        return repository.findById(cod)
+                .orElseThrow(() -> new IllegalArgumentException("Produsul cu codul " + cod + " nu exista."));
     }
 
-    public List<Produs> listeazaToare() {
-        return new ArrayList<>(produse.values());
+    public List<Produs> listeazaToate() throws SQLException {
+        return repository.findAll();
     }
 
-    public List<Produs> listeazaSortateDupaPreт() {
-        List<Produs> lista = new ArrayList<>(produse.values());
-        Collections.sort(lista);
-        return lista;
+    /** findAll() vine deja ordonat dupa pret_minim din SQL. */
+    public List<Produs> listeazaSortateDupaPret() throws SQLException {
+        return repository.findAll();
     }
 
-    public List<Produs> cautaDupaCategorie(CategorieProdus categorie) {
-        List<Produs> rezultat = new ArrayList<>();
-        for (Produs p : produse.values()) {
-            if (p.getCategorie() == categorie) rezultat.add(p);
-        }
-        return rezultat;
-    }
-
-    public Map<CategorieProdus, List<Produs>> grupeazaDupaCategorie() {
-        Map<CategorieProdus, List<Produs>> grupuri = new HashMap<>();
-        for (Produs p : produse.values()) {
+    /** Grupare pe categorie, pastrand ordinea pe pret din findAll(). */
+    public Map<CategorieProdus, List<Produs>> grupeazaDupaCategorie() throws SQLException {
+        Map<CategorieProdus, List<Produs>> grupuri = new LinkedHashMap<>();
+        for (Produs p : repository.findAll()) {
             grupuri.computeIfAbsent(p.getCategorie(), k -> new ArrayList<>()).add(p);
         }
         return grupuri;
     }
 
-    public void stergeProdus(String cod) {
-        String cheie = cod.toUpperCase();
-        if (!produse.containsKey(cheie)) {
+    public void stergeProdus(String cod) throws SQLException {
+        if (repository.findById(cod).isEmpty()) {
             throw new IllegalArgumentException("Produsul cu codul " + cod + " nu exista.");
         }
-        produse.remove(cheie);
+        repository.delete(cod);
     }
 }

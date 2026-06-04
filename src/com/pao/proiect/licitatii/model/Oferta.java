@@ -17,9 +17,11 @@ public class Oferta {
     }
 
     public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public Cumparator getCumparator() { return cumparator; }
     public double getSuma() { return suma; }
     public LocalDateTime getDataOferta() { return dataOferta; }
+    public void setDataOferta(LocalDateTime dataOferta) { this.dataOferta = dataOferta; }
 
     @Override
     public boolean equals(Object o) {

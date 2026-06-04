@@ -16,6 +16,7 @@ public abstract class Utilizator {
     public abstract String getRol();
 
     public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public String getNume() { return nume; }
     public String getEmail() { return email; }
 

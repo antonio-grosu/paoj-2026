@@ -23,6 +23,7 @@ public class Licitatie {
     }
 
     public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public Produs getProdus() { return produs; }
     public LocalDateTime getDataStart() { return dataStart; }
     public LocalDateTime getDataFinal() { return dataFinal; }
