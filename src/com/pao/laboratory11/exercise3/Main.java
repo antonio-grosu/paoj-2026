@@ -1,8 +1,15 @@
 package com.pao.laboratory11.exercise3;
 
-import java.util.*;
-import java.util.stream.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Main {
 
